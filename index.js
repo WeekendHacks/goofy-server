@@ -2,9 +2,6 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-function handleMood(mood) {
-	console.log("mood is ", mood);
-}
 
 app.get('/', function(req, res){
 	  res.sendfile('index.html');
@@ -12,7 +9,11 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
 	  console.log('a user connected');
-	  socket.on('mood', handleMood);
+		socket.on('mood', function(data) {
+			console.log('mood is ', data);
+      io.emit('track', {track: 'https://open.spotify.com/track/6b3b7lILUJqXcp6w9wNQSm'});
+		});
+		
 });
 
 http.listen(3000, function(){
